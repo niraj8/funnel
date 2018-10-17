@@ -9,26 +9,11 @@ var corsOptions = {
 	// origin: 'https://abc.herokuapp.com',
 }
 
-var dataColumns = [
-	"crm_id",
-	"received_date",
-	"isu",
-	"customer_name",
-	"customer_brief",
-	"country",
-	"geography",
-	"presales_lead",
-	"account_contact",
-	"bd_involved",
-	"tech_involved"
-]
-
 app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-	res.send('Hello world')
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + 'ui/public/index.html'));
 })
-
 app.get('/v1/leads', cors(corsOptions), (req, res) => {
 	db.any("SELECT * FROM leads")
 	.then(d => res.json(d))
@@ -49,10 +34,12 @@ app.post('/v1/leads', cors(corsOptions), (req, res) => {
     });
 })
 
-// app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
-	
-// 	db.one(`UPDATE leads SET ${} WHERE id=${req.params.id}`)
-// })
+app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
+	// todo: check if partial update works correctly
+	db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(req.body)}' WHERE id=${req.params.id} RETURNING data`)
+	.then(d => res.json(d))
+	.catch(err => console.log('ERROR: ', err))
+})
 
 // app.delete('/v1/leads', cors(corsOptions), (req, res) => {
 
