@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "heroku-postbuild": "webpack -p",
-    "build-dev": "node_modules/.bin/webpack ui/index.js --output ui/public/bin/app.js -d --watch"
+    "build-dev": "webpack -d --watch"
   },
   "keywords": [],
   "author": "Niraj Palecha",

@@ -16,10 +16,11 @@ module.exports = {
 
 		var tbody = m('tbody', Lead.list.map(lead => {
 			return m('tr', m('th', {id: lead.id, scope: 'row'}, lead.id), orderedCols.map(k => {
-				return m('td', m('a', {class: 'editable', href: "#", id: k, "data-url":"/post", "data-type":"text", "data-pk":lead.id, "data-title":`Enter ${dataColumns[k]}`}, lead.data[k]))
+				return m('td', m('a', {class: 'editable', href: "#", id: k, "data-url":`/v1/leads/${lead.id}`, "data-type":"text", "data-pk":lead.id, "data-title":`Enter ${dataColumns[k]}`}, lead.data[k]))
 			}))
 		}))
 
+		// var delEl = m('a', {href:"#", id:"username", "data-type":"text", "data-pk":"1", "data-url":"/post", "data-title":"Enter username"}, 'superuser')
 		return m('.table', thead, tbody)
 	}
 }

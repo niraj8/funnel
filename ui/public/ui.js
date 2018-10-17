@@ -1,4 +1,6 @@
 $(document).ready(function() {
-    $.fn.editable.defaults.mode = 'inline';
-    $('.editable').editable();
+	console.log("Run $('.editable').editable() to make it editable")
+	$.fn.editable.defaults.mode = 'inline';
+	$.fn.editable.defaults.ajaxOptions = {type: "PUT"};
+	$('.editable').editable()
 });
