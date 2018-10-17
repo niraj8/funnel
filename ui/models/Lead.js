@@ -5,7 +5,7 @@ var Lead = {
     loadList: function() {
         return m.request({
             method: "GET",
-            url: "http://localhost:3001/v1/leads",
+            url: "/v1/leads",
             // withCredentials: true
         })
         .then(function(result) {
@@ -16,7 +16,7 @@ var Lead = {
     load: function(id) {
         return m.request({
             method: "GET",
-            url: "http://localhost:3001/v1/leads/" + id,
+            url: "/v1/leads/" + id,
             withCredentials: true
         })
         .then(function(result) {
@@ -26,7 +26,7 @@ var Lead = {
     save: function() {
     	return m.request({
     		method: "PUT",
-    		url: "http://localhost:3001/v1/leads/" + Lead.current.id,
+    		url: "/v1/leads/" + Lead.current.id,
     		data: Lead.current,
     		// withCredentials: true
     	})
