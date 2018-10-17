@@ -49,10 +49,10 @@ app.post('/v1/leads', cors(corsOptions), (req, res) => {
     });
 })
 
-app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
+// app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
 	
-	db.one(`UPDATE leads SET ${} WHERE id=${req.params.id}`)
-})
+// 	db.one(`UPDATE leads SET ${} WHERE id=${req.params.id}`)
+// })
 
 // app.delete('/v1/leads', cors(corsOptions), (req, res) => {
 
