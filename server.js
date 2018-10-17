@@ -2,6 +2,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const db = require("./src/db.js")
 const cors = require("cors")
+const path = require("path")
 
 const app = express()
 
@@ -10,10 +11,8 @@ var corsOptions = {
 }
 
 app.use(bodyParser.json())
+app.use(express.static(__dirname + '/ui/public'))
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + 'ui/public/index.html'));
-})
 app.get('/v1/leads', cors(corsOptions), (req, res) => {
 	db.any("SELECT * FROM leads")
 	.then(d => res.json(d))
