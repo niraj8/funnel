@@ -1,3 +1,5 @@
 node_modules/
 .env
 ui/public/bin/
+setenv.bat
+vendor/

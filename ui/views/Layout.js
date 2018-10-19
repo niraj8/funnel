@@ -2,11 +2,11 @@ var m = require('mithril')
 
 module.exports = {
 	view: function(vnode) {
-		return m("main.layout", [
-			m("nav.menu", [
-				m("a[href='/list']", {oncreate: m.route.link}, "Funnel")
-			]),
-			m(".container-fluid", vnode.children)
+		var nav = m('nav.nav-pills.nav-fill', [
+			m("a.nav-item[href='/list']#nav-title", {oncreate: m.route.link}, "Funnel"),
+			m("button.btn.btn-primary.nav-item.float-right#edit-toggle", "Enable editing")
 		])
+		
+		return m(".container-fluid", nav, vnode.children)
 	}
 }

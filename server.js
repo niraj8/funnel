@@ -35,9 +35,10 @@ app.post('/v1/leads', cors(corsOptions), (req, res) => {
 
 app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
 	// todo: check if partial update works correctly
-	db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(req.body)}' WHERE id=${req.params.id} RETURNING data`)
-	.then(d => res.json(d))
-	.catch(err => console.log('ERROR: ', err))
+	console.log(req)
+	// db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(req.body)}' WHERE id=${req.params.id} RETURNING data`)
+	// .then(d => res.json(d))
+	// .catch(err => console.log('ERROR: ', err))
 })
 
 // app.delete('/v1/leads', cors(corsOptions), (req, res) => {
