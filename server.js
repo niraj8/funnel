@@ -10,22 +10,25 @@ var corsOptions = {
 	// origin: 'https://abc.herokuapp.com',
 }
 
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 app.use(bodyParser.json())
 app.use(express.static(__dirname + '/ui/public'))
 
-app.get('/v1/leads', cors(corsOptions), (req, res) => {
+app.get('/v1/leads', cors(), (req, res) => {
 	db.any("SELECT * FROM leads")
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR:', err))
 })
 
-app.get('/v1/leads/:id', cors(corsOptions), (req, res) => {
+app.get('/v1/leads/:id', cors(), (req, res) => {
 	db.one("SELECT * FROM leads WHERE id = $1", [req.params.id])
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR:', err))
 })
 
-app.post('/v1/leads', cors(corsOptions), (req, res) => {
+app.post('/v1/leads', jsonParser, cors(), (req, res) => {
 	db.one('INSERT INTO leads(data) VALUES($1) RETURNING id', [req.body])
 	.then(d => res.json({id: d.id}))
 	.catch(error => {
@@ -33,12 +36,13 @@ app.post('/v1/leads', cors(corsOptions), (req, res) => {
     });
 })
 
-app.put('/v1/leads/:id', cors(corsOptions), (req, res) => {
-	// todo: check if partial update works correctly
-	console.log(req)
-	// db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(req.body)}' WHERE id=${req.params.id} RETURNING data`)
-	// .then(d => res.json(d))
-	// .catch(err => console.log('ERROR: ', err))
+app.put('/v1/leads/:id', urlencodedParser, cors(), (req, res) => {
+	var updatedData = {}
+	updatedData[req.body.name] = req.body.value
+	
+	db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(updatedData)}' WHERE id=${req.params.id} RETURNING data`)
+	.then(d => res.json(d))
+	.catch(err => console.log('ERROR: ', err))
 })
 
 // app.delete('/v1/leads', cors(corsOptions), (req, res) => {
