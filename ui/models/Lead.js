@@ -20,13 +20,13 @@ var Lead = {
             withCredentials: true
         })
         .then(function(result) {
-            // Lead.current = result
+            Lead.current = result
         })
     },
     save: function() {
     	return m.request({
     		method: "PUT",
-    		url: "/v1/leads/" + Lead.current.id,
+    		// url: "/v1/leads/" + Lead.current.id,
     		data: Lead.current,
     		// withCredentials: true
     	})

@@ -6,10 +6,6 @@ const path = require("path")
 
 const app = express()
 
-var corsOptions = {
-	// origin: 'https://abc.herokuapp.com',
-}
-
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
@@ -31,23 +27,21 @@ app.get('/v1/leads/:id', cors(), (req, res) => {
 app.post('/v1/leads', jsonParser, cors(), (req, res) => {
 	db.one('INSERT INTO leads(data) VALUES($1) RETURNING id', [req.body])
 	.then(d => res.json({id: d.id}))
-	.catch(error => {
-        console.log('ERROR:', error); // print error;
-    });
+	.catch(err => console.log('ERROR:', err))
 })
 
 app.put('/v1/leads/:id', urlencodedParser, cors(), (req, res) => {
 	var updatedData = {}
 	updatedData[req.body.name] = req.body.value
+
+	console.log('inside .put()')
 	
 	db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(updatedData)}' WHERE id=${req.params.id} RETURNING data`)
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR: ', err))
 })
 
-// app.delete('/v1/leads', cors(corsOptions), (req, res) => {
-
-// })
+// app.delete('/v1/leads', cors(corsOptions), (req, res) => {})
 
 app.set('port', (process.env.PORT || 3001))
 

@@ -20,8 +20,12 @@ module.exports = {
 			}))
 		}))
 
-		var table = m('.table.table-striped.table-responsive.table-sm.table-bordered', thead, tbody)
+		var editBtn = m("button.btn.btn-primary.nav-item.float-right#edit-toggle", "Enable editing")
 
-		return table
+		var newRow = m("a[href='/lead/new'].btn.btn-primary#add-new-lead", {oncreate: m.route.link}, "New Lead")
+		var table = m(".table.table-striped.table-responsive.table-sm.table-bordered", thead, tbody)
+
+		var div = m('div', editBtn, table, newRow)
+		return div
 	}
 }

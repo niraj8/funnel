@@ -2,28 +2,28 @@
 var m = require("mithril")
 var Lead = require("../models/Lead")
 const {dataColumns} = require("../../config.js")
+const orderedKeys = Object.keys(dataColumns)
 
 // todo: fix lead edit form
 module.exports = {
 	oninit: function(vnode) {Lead.load(vnode.attrs.id)},
 	view: function() {
+
+		var inputs = []
+		orderedKeys.forEach(k => {
+			var label = m("label.label", dataColumns[k])
+			var input = m("input.input[type=text]", {
+				oninput: m.withAttr("value", function(value) {Lead.current[k] = value}),
+				value: Lead.current[k]
+			})
+			inputs.push(label)
+			inputs.push(input)
+		})
 		return m("form", {
 			onsubmit: function(e) {
 				e.preventDefault()
 				Lead.save()
 			}
-		}, [
-		m("label.label", "First name"),
-		m("input.input[type=text][placeholder=First name]", {
-			oninput: m.withAttr("value", function(value) {User.current.firstName = value}),
-			value: User.current.firstName
-		}),
-		m("label.label", "Last name"),
-		m("input.input[placeholder=Last name]", {
-			oninput: m.withAttr("value", function(value) {User.current.lastName = value}),
-			value: User.current.lastName
-		}),
-		m("button.button[type=submit]", "Save"),
-		])
+		}, [inputs, m("button.button[type=submit]", "Save")])
 	}
 }
