@@ -30,6 +30,13 @@ var Lead = {
     		data: Lead.current,
     		// withCredentials: true
     	})
+    },
+    new: function() {
+        return m.request({
+            method: "POST",
+            url: "/v1/leads",
+            data: Lead.current
+        })
     }
 }
 

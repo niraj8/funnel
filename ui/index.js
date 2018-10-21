@@ -1,10 +1,16 @@
 var m = require('mithril')
 
 var Layout = require('./views/Layout')
+var Login = require('./views/Login')
 var LeadList = require('./views/LeadList')
 var LeadForm = require('./views/LeadForm')
 
-m.route(document.body, "/list", {
+m.route(document.body, "/login", {
+	"/login": {
+		render: function() {
+			return m(Login)
+		}
+	},
 	"/list": {
 		render: function() {
 			return m(Layout, m(LeadList))

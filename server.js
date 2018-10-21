@@ -1,19 +1,26 @@
 const express = require("express")
 const bodyParser = require("body-parser")
-const db = require("./src/db.js")
 const cors = require("cors")
 const path = require("path")
+const http = require("http")
+const enforce = require("express-sslify")
+
+const db = require("./src/db.js")
 
 const app = express()
+
+// Enforce traffic on ssl
+// heroku reverse proxies set the x-forwarded-proto header flag
+// app.use(enforce.HTTPS({ trustProtoHeader: true }	));
+app.use(bodyParser.json())
+app.use(express.static(__dirname + '/ui/public'))
+app.set('port', (process.env.PORT || 3001))
 
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-app.use(bodyParser.json())
-app.use(express.static(__dirname + '/ui/public'))
-
 app.get('/v1/leads', cors(), (req, res) => {
-	db.any("SELECT * FROM leads")
+	db.any("SELECT * FROM leads where visible=true")
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR:', err))
 })
@@ -34,17 +41,18 @@ app.put('/v1/leads/:id', urlencodedParser, cors(), (req, res) => {
 	var updatedData = {}
 	updatedData[req.body.name] = req.body.value
 
-	console.log('inside .put()')
-	
 	db.one(`UPDATE leads SET data = data::jsonb || '${JSON.stringify(updatedData)}' WHERE id=${req.params.id} RETURNING data`)
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR: ', err))
 })
 
-// app.delete('/v1/leads', cors(corsOptions), (req, res) => {})
-
-app.set('port', (process.env.PORT || 3001))
-
-app.listen(app.get('port'), () => {
-	console.log(`Server up: https://localhost:${app.get('port')}`)
+app.delete('/v1/leads/:id', cors(), (req, res) => {
+	db.one(`UPDATE leads SET visible=false WHERE id=${req.params.id} RETURNING visible`)
+	.then(d => res.json(d))
+	.catch(err => console.log('ERROR: ', err))
 })
+
+
+http.createServer(app).listen(app.get('port'), function() {
+	console.log(`Server up: https://localhost:${app.get('port')}`)
+});

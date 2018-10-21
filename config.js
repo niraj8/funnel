@@ -1,15 +1,48 @@
 var dataColumns = {
-	"crm_id": "CRM ID",
-	"received_date": "Received date",
-	"isu": "ISU",
-	"customer_name": "Customer name",
-	"customer_brief": "Brief",
-	"country": "Country",
-	"geography": "Geography",
-	"presales_lead": "Presales Lead",
-	"account_contact": "Account Contact",
-	"bd_involved": "BD Involved",
-	"tech_involved": "Technology Involved"
+	crm_id: {
+		value: "CRM ID",
+		inputType: "text"
+	},
+	received_date: {
+		value: "Received date",
+		inputType: "date"
+	},
+	isu: {
+		value: "ISU",
+		inputType: "text"
+	},
+	account_contact: {
+		value: "Account Contact" ,
+		inputType: "text"
+	},
+	presales_lead: {
+		value: "Presales Lead",
+		inputType: "text"
+	},
+	bd_involved: {
+		value: "BD Involved",
+		inputType: "text"
+	},
+	customer_name: {
+		value: "Customer name",
+		inputType: "text"
+	},
+	country: {
+		value: "Country",
+		inputType: "dropdown"
+	},
+	geography: {
+		value: "Geography",
+		inputType: "dropdown"
+	},
+	customer_brief: {
+		value: "Customer Brief",
+		inputType: "textarea"
+	},
+	tech_involved: {
+		value: "Technology Involved",
+		inputType: "text"
+	}
 }
 
 module.exports = {
