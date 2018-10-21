@@ -36,6 +36,8 @@ var Lead = {
             method: "POST",
             url: "/v1/leads",
             data: Lead.current
+        }).then(d => {
+            Lead.list.unshift(d)
         })
     }
 }

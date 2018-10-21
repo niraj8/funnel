@@ -11,7 +11,9 @@ const app = express()
 
 // Enforce traffic on ssl
 // heroku reverse proxies set the x-forwarded-proto header flag
-// app.use(enforce.HTTPS({ trustProtoHeader: true }	));
+if (process.env.NODE_ENV === "production") {
+	app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
 app.use(bodyParser.json())
 app.use(express.static(__dirname + '/ui/public'))
 app.set('port', (process.env.PORT || 3001))
@@ -32,8 +34,8 @@ app.get('/v1/leads/:id', cors(), (req, res) => {
 })
 
 app.post('/v1/leads', jsonParser, cors(), (req, res) => {
-	db.one('INSERT INTO leads(data) VALUES($1) RETURNING id', [req.body])
-	.then(d => res.json({id: d.id}))
+	db.one('INSERT INTO leads(data) VALUES($1) RETURNING *', [req.body])
+	.then(d => res.json(d))
 	.catch(err => console.log('ERROR:', err))
 })
 

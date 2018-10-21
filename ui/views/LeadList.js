@@ -20,14 +20,18 @@ module.exports = {
 			}))
 		}))
 
-		var editBtn = m("button.btn.btn-primary.nav-item.float-right#edit-toggle", "Toggle editing")
+		var editBtn = m("button.btn.btn-info.nav-item.float-right#edit-toggle", "Toggle editing")
 
-		var newRow = m("a[href='/lead/new'].btn.btn-primary#add-new-lead", {oncreate: m.route.link}, "Add new lead")
+		var searchInput = m("input[type=text]", {id:"search-input", class:"form-control", onkeyup:"myFunction()", placeholder:"Search"})
+		var searchGroup = m(".input-group#search-group", searchInput)
+
+		// var newRow = m("a[href='/lead/new'].btn.btn-primary#add-new-lead", {oncreate: m.route.link}, "Add new lead")
 		var table = m(".table.table-striped.table-responsive.table-sm.table-bordered", thead, tbody)
 
-		if (Lead.list.length === 0)
-			return m('div', editBtn, m("h4", "No Leads found."), newRow)
-		else return m('div', editBtn, table, newRow)
+		// if (Lead.list.length === 0)
+		// 	return m('div', editBtn, m("h4", "No Leads found."), newRow)
+		// else 
+		return m('div', editBtn, searchGroup, table)
 
 	}
 }

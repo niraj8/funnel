@@ -5,7 +5,7 @@ var Login = require('./views/Login')
 var LeadList = require('./views/LeadList')
 var LeadForm = require('./views/LeadForm')
 
-m.route(document.body, "/login", {
+m.route(document.body, "/list", {
 	"/login": {
 		render: function() {
 			return m(Login)
@@ -13,12 +13,7 @@ m.route(document.body, "/login", {
 	},
 	"/list": {
 		render: function() {
-			return m(Layout, m(LeadList))
-		}
-	},
-	"/lead/new": {
-		render: function() {
-			return m(Layout, m(LeadForm))
+			return m(Layout, m(LeadForm, m(LeadList)))
 		}
 	},
 	// todo

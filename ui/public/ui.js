@@ -1,11 +1,4 @@
-$(document).ready(function() {
-	$.fn.editable.defaults.mode = 'inline';
-	$.fn.editable.defaults.showbuttons = false;
-	$.fn.editable.defaults.ajaxOptions = {type: "PUT", dataType: 'json'};
-
-	var editOn = false
-	var editToggle = $('#edit-toggle')
-	editToggle.click((e) => $('.editable').editable('toggleDisabled'));
+$(function(){
 
 	// combodate
 	$("input#received_date").addClass("combodate")
@@ -13,4 +6,12 @@ $(document).ready(function() {
 	$("input#received_date").attr("data-template", "DD MMM YYYY")
 
 	$('.combodate').combodate({maxYear:new Date().getFullYear()})
+	
+	$.fn.editable.defaults.mode = 'inline';
+	$.fn.editable.defaults.showbuttons = false;
+	$.fn.editable.defaults.ajaxOptions = {type: "PUT", dataType: 'json'};
+
+	var editToggle = $('#edit-toggle')
+	editToggle.click((e) => $('.editable').editable('toggleDisabled'));
 });
+

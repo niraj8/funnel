@@ -1,6 +1,7 @@
 body,.input,.button {font:normal 16px Verdana;margin:0;}
-nav {margin: .5em;}
+nav {margin: .8em;}
 .layout {margin:10px auto;}
 
 #edit-toggle {margin: .5em;}
 #nav-title {font-size: 1.5em}
+#search-group {margin: 0.7em auto;}
