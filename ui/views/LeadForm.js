@@ -15,7 +15,8 @@ module.exports = {
 			var inputElement = dataColumns[k].inputType === 'textarea' ? 'textarea':'input'
 			var input = m(`${inputElement}.form-control`, {
 				id: k,
-				oninput: m.withAttr("value", function(value) {Lead.current[k] = value})
+				oninput: m.withAttr("value", function(value) {Lead.current[k] = value}),
+				placeholder: dataColumns[k].placeholder
 			})
 			inputs.push(m('div.col-md-4 mb-2', label, input))
 			// inputs.push(input)

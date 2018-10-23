@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
+    "start-dev": "nodemon server.js",
     "heroku-postbuild": "webpack -p",
     "build-dev": "webpack -d --watch"
   },
@@ -13,13 +14,18 @@
   "author": "Niraj Palecha",
   "license": "MIT",
   "dependencies": {
+    "connect-pg-simple": "^5.0.0",
     "cors": "^2.8.4",
     "express": "^4.16.4",
-    "express-sslify": "1.2.0",
+    "express-session": "^1.15.6",
+    "express-sslify": "^1.2.0",
+    "helmet": "^3.14.0",
     "mithril": "^1.1.6",
+    "morgan": "^1.9.1",
     "pg-promise": "^8.5.0"
   },
   "devDependencies": {
+    "nodemon": "^1.18.4",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2"
   }

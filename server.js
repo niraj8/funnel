@@ -4,8 +4,11 @@ const cors = require("cors")
 const path = require("path")
 const http = require("http")
 const enforce = require("express-sslify")
-
+const helmet = require("helmet")
+const session = require("express-session")
 const db = require("./src/db.js")
+const sessionStore = require("connect-pg-simple")(session)
+const morgan = require('morgan')
 
 const app = express()
 
@@ -13,13 +16,31 @@ const app = express()
 // heroku reverse proxies set the x-forwarded-proto header flag
 if (process.env.NODE_ENV === "production") {
 	app.use(enforce.HTTPS({ trustProtoHeader: true }));
+	app.set('trust proxy', 1) // trust first proxy
+	session.cookie.secure = true // serve secure cookies
+} else {
+	app.use(morgan('combined'));
 }
-app.use(bodyParser.json())
+
+app.use(session({
+	store: new sessionStore(),
+	secret: process.env.COOKIE_SECRET,
+	resave: false,
+	saveUninitialized: true,
+	cookie: { maxAge: 30*24*60*60*1000} // 30 days
+}))
+
+app.use(helmet())
+// app.use(bodyParser.json())
 app.use(express.static(__dirname + '/ui/public'))
 app.set('port', (process.env.PORT || 3001))
 
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+// app.get('/login', (req, res) => {
+
+// })
 
 app.get('/v1/leads', cors(), (req, res) => {
 	db.any("SELECT * FROM leads where visible=true")
@@ -53,7 +74,6 @@ app.delete('/v1/leads/:id', cors(), (req, res) => {
 	.then(d => res.json(d))
 	.catch(err => console.log('ERROR: ', err))
 })
-
 
 http.createServer(app).listen(app.get('port'), function() {
 	console.log(`Server up: https://localhost:${app.get('port')}`)

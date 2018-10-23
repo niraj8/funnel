@@ -5,7 +5,8 @@ var dataColumns = {
 	},
 	received_date: {
 		value: "Received date",
-		inputType: "date"
+		inputType: "date",
+		placeholder: 'Format: DD-MM-YYYY'
 	},
 	isu: {
 		value: "ISU",
