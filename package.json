@@ -20,7 +20,8 @@
     "helmet": "^3.14.0",
     "mithril": "^1.1.6",
     "morgan": "^1.9.1",
-    "pg-promise": "^8.5.0"
+    "pg-promise": "^8.5.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.4",

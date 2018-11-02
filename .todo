@@ -3,4 +3,4 @@
 - [] Sort and filter
 - [] Security: snyk, sqlmap, npm audit
 - [] Search table
-- [] Create session table in heroku postgres using /node_modules/.bin/table.sql
+- [] Check token before serving data in leads API

@@ -9,16 +9,17 @@ var Auth = {
 			url: "/v1/token",
 			data: {username: Auth.username, password: Auth.password}
 		}).then(d => {
-			console.log(Auth.username)
-			console.log(Auth.password)
-			Auth.credentials = {}
+			Auth.username = ""
+			Auth.password = ""
 			localStorage.setItem("auth-token", d.token)
 			localStorage.setItem("auth-expiry", d.expiry)
+			console.log(d)
 			m.route.set("/list")
 		})
 	},
 	clear: () => {
 		// clear token from localStorage
+		localStorage.clear()
 	},
 	setUsername: (value) => {
 		Auth.username = value

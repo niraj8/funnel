@@ -6,10 +6,13 @@ const http = require("http")
 const enforce = require("express-sslify")
 const helmet = require("helmet")
 const db = require("./src/db.js")
-const morgan = require('morgan')
+const morgan = require("morgan")
+const uuid = require("uuid/v4")
+const crypto = require("crypto")
 
 const app = express()
 
+const expiresIn = 7 * 24 * 60 * 60 * 1000 // 7 days
 // Enforce traffic on ssl
 // heroku reverse proxies set the x-forwarded-proto header flag
 if (process.env.NODE_ENV === "production") {
@@ -27,13 +30,30 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // APIs
-
+var hash = ""
+var token = ""
 app.post('/v1/token', jsonParser, (req, res) => {
+	hash = crypto.createHash("md5").update(req.body.password).digest("hex")
+	console.log(hash)
 	console.log(req.body)
-	res.json({
-		token: 'dummy',
-		expiry: new Date().getTime() + 7*24*60*60*1000
+	db.any("SELECT * FROM users WHERE id=$1 and hash=$2", [req.body.username, hash])
+	.then(d => {
+		console.log(d)
+		if (d.length === 0) {
+			res.status(401)
+			res.json({error: "Invalid Credentials"})
+			res.end()
+		} else {
+			token = uuid()
+			return db.one("UPDATE users SET token=$1 WHERE id=$2 RETURNING *", [token, req.body.username])
+			.then(d => res.json({token: d.token, expiry: new Date(d._created).getTime() + expiresIn}))
+		}
 	})
+	.catch(err => {
+		res.status(500)
+		res.json({error: "Something went wrong"})
+	})
+	
 })
 
 app.get('/v1/leads', cors(), (req, res) => {
