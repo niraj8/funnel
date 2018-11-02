@@ -1,7 +1,35 @@
 body,.input,.button {font:normal 16px Verdana;margin:0;}
+
+body {
+  height: 100%;
+}
+
 nav {margin: .8em;}
 .layout {margin:10px auto;}
 
 #edit-toggle {margin: .5em;}
 #nav-title {font-size: 1.5em}
 #search-group {margin: 0.7em auto;}
+
+.form-login {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-login .form-control:focus {
+  z-index: 2;
+}
+
+.form-login input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-login input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

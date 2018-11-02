@@ -14,10 +14,8 @@
   "author": "Niraj Palecha",
   "license": "MIT",
   "dependencies": {
-    "connect-pg-simple": "^5.0.0",
     "cors": "^2.8.4",
     "express": "^4.16.4",
-    "express-session": "^1.15.6",
     "express-sslify": "^1.2.0",
     "helmet": "^3.14.0",
     "mithril": "^1.1.6",

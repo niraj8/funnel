@@ -1,4 +1,9 @@
 var m = require('mithril')
+var Auth = require('./Auth')
+
+var headers = {
+    'Authorization': `Bearer ${Auth.token}`
+}
 
 var Lead = {
     list: [],
@@ -6,6 +11,7 @@ var Lead = {
         return m.request({
             method: "GET",
             url: "/v1/leads",
+            headers: headers
             // withCredentials: true
         })
         .then(function(result) {
