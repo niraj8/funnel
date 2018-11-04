@@ -2,6 +2,7 @@ var m = require('mithril')
 var Auth = require('../models/Auth')
 
 module.exports = {
+	oninit: () => { Auth.errorMessage = "" },
 	view: function(vnode) {
 		var userLabel = m("span.input-group-text.sr-only", {for:'username'}, 'username')
 		var userInput = m("input.form-control[type=text]", {
@@ -18,6 +19,7 @@ module.exports = {
 			required: true
 		})
 
+		var flashError = m('p.bg-danger.text-white.text-center', Auth.errorMessage)
 		var userGroup = m('.input-group', m('.input-group-prepend', userLabel), userInput)
 		var passGroup = m('.input-group', m('.input-group-prepend', passLabel), passInput)
 		return m("form.form-login.container", {
@@ -25,6 +27,6 @@ module.exports = {
 				e.preventDefault()
 				Auth.login()
 			}
-		}, [m('h3.mb-3.text-center', 'Sign in'), userGroup, passGroup, m("button.btn.btn-lg.btn-block.btn-primary[type=submit]", "Login")])
+		}, [m('h3.mb-3.text-center', 'Sign in'), flashError, userGroup, passGroup, m("button.btn.btn-lg.btn-block.btn-primary[type=submit]", "Login")])
 	}
 }

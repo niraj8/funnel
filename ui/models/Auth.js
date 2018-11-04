@@ -3,6 +3,7 @@ const m = require("mithril")
 var Auth = {
 	username: "",
 	password: "",
+	errorMessage: "",
 	login: () => {
 		return m.request({
 			method: 'POST',
@@ -13,20 +14,29 @@ var Auth = {
 			Auth.password = ""
 			localStorage.setItem("auth-token", d.token)
 			localStorage.setItem("auth-expiry", d.expiry)
-			console.log(d)
 			m.route.set("/list")
+		}).catch(err => {
+			Auth.errorMessage = err.error
 		})
 	},
-	clear: () => {
-		// clear token from localStorage
-		localStorage.clear()
-	},
-	setUsername: (value) => {
+	setUsername: (value) => { 
 		Auth.username = value
+		Auth.errorMessage = ""
 	},
-	setPassword: (value) => {
+	setPassword: (value) => { 
 		Auth.password = value
-	}
+		Auth.errorMessage = ""
+	},
+	token: function() {
+        var token = localStorage.getItem("auth-token")
+        var expiry = localStorage.getItem("auth-expiry")
+        if (!token || expiry <= new Date().getTime()) {
+			// clear token from localStorage
+            localStorage.clear()
+            m.route.set("/login")
+        }
+        else return token
+    }
 }
 
 module.exports = Auth

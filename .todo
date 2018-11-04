@@ -1,6 +1,9 @@
 - [x] Use helmet
-- [] Login
+- [x] Check token before serving data in leads API
+- [x] Search table
 - [] Sort and filter
 - [] Security: snyk, sqlmap, npm audit
-- [] Search table
-- [] Check token before serving data in leads API
+- [] Login using bcrypt
+- [] Links to set password, that disappears after the password has been set
+- [] Forgot Password
+- [] Mailer

@@ -4,5 +4,6 @@ CREATE TABLE users(
 	id TEXT PRIMARY KEY,
 	hash TEXT NOT NULL,
 	token TEXT,
-	visible BOOLEAN NOT NULL default true
+	fname TEXT,
+	lname TEXT
 );

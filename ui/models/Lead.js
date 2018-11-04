@@ -1,51 +1,48 @@
 var m = require('mithril')
 var Auth = require('./Auth')
 
-var headers = {
-    'Authorization': `Bearer ${Auth.token}`
-}
-
 var Lead = {
-    list: [],
-    loadList: function() {
-        return m.request({
-            method: "GET",
-            url: "/v1/leads",
-            headers: headers
-            // withCredentials: true
-        })
-        .then(function(result) {
-            Lead.list = result
-        })
-    },
-    current: {},
-    load: function(id) {
-        return m.request({
-            method: "GET",
-            url: "/v1/leads/" + id,
-            withCredentials: true
-        })
-        .then(function(result) {
-            Lead.current = result
-        })
-    },
-    save: function() {
-    	return m.request({
-    		method: "PUT",
-    		// url: "/v1/leads/" + Lead.current.id,
-    		data: Lead.current,
-    		// withCredentials: true
-    	})
-    },
-    new: function() {
-        return m.request({
-            method: "POST",
-            url: "/v1/leads",
-            data: Lead.current
-        }).then(d => {
-            Lead.list.unshift(d)
-        })
-    }
+	list: [],
+	loadList: () => {
+		return m.request({
+			method: "GET",
+			url: "/v1/leads",
+			headers:  {'Authorization': `Bearer ${Auth.token()}`}
+		})
+		.then((result) => {
+			result = result.sort((a,b) => a.id > b.id)
+			Lead.list = result
+		})
+	},
+	current: {},
+	load: (id) => {
+		return m.request({
+			method: "GET",
+			url: "/v1/leads/" + id,
+			headers: {'Authorization': `Bearer ${Auth.token()}`}
+		})
+		.then((result) => {
+			Lead.current = result
+		})
+	},
+	// save: () => {
+	// 	return m.request({
+	// 		method: "PUT",
+	// 		url: "/v1/leads/" + Lead.current.id,
+	// 		data: Lead.current,
+	//		headers: {'Authorization': `Bearer ${Auth.token()}`}
+	// 	})
+	// },
+	new: () => {
+		return m.request({
+			method: "POST",
+			url: "/v1/leads",
+			data: Lead.current,
+			headers: {'Authorization': `Bearer ${Auth.token()}`}
+		}).then(d => {
+			Lead.list.unshift(d)
+		})
+	}
 }
 
 module.exports = Lead
