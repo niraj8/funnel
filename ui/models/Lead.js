@@ -10,6 +10,7 @@ var Lead = {
 			headers:  {'Authorization': `Bearer ${Auth.token()}`}
 		})
 		.then((result) => {
+			// todo: fix sort on id 
 			result = result.sort((a,b) => a.id > b.id)
 			Lead.list = result
 		})
@@ -40,7 +41,8 @@ var Lead = {
 			data: Lead.current,
 			headers: {'Authorization': `Bearer ${Auth.token()}`}
 		}).then(d => {
-			Lead.list.unshift(d)
+			Lead.list.push(d)
+			Lead.current = d
 		})
 	}
 }

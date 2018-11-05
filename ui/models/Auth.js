@@ -33,6 +33,7 @@ var Auth = {
         if (!token || expiry <= new Date().getTime()) {
 			// clear token from localStorage
             localStorage.clear()
+            Auth.errorMessage("Session expired. Please login again")
             m.route.set("/login")
         }
         else return token

@@ -5,14 +5,16 @@ const path = require("path")
 const http = require("http")
 const enforce = require("express-sslify")
 const helmet = require("helmet")
-const db = require("./src/db.js")
 const morgan = require("morgan")
 const uuid = require("uuid/v4")
 const crypto = require("crypto")
 
+const db = require("./src/db.js")
+
 const app = express()
 
 const expiresIn = 7 * 24 * 60 * 60 * 1000 // 7 days
+
 // Enforce traffic on ssl
 // heroku reverse proxies set the x-forwarded-proto header flag
 if (process.env.NODE_ENV === "production") {
@@ -26,14 +28,15 @@ app.use(helmet())
 app.use(express.static(__dirname + '/ui/public'))
 app.set('port', (process.env.PORT || 3001))
 
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const jsonParser = bodyParser.json()
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // bcrypt.hash(pw, 10, (err, hash) => {})
 
 // APIs
 var hash = ""
 var token = ""
+
 app.post('/v1/token', jsonParser, (req, res) => {
 	hash = crypto.createHash("md5").update(req.body.password).digest("hex")
 	db.any("SELECT * FROM users WHERE id=$1 and hash=$2", [req.body.username, hash])
@@ -47,7 +50,6 @@ app.post('/v1/token', jsonParser, (req, res) => {
 			return db.tx(t => {
 				var q1 = t.none(`UPDATE users SET _modified=NOW() WHERE id=$1`, [req.body.username])
 				var q2 = t.one("UPDATE users SET token=$1 WHERE id=$2 RETURNING *", [token, req.body.username])
-
 				return t.batch([q1, q2])
 			})
 			.then(d => res.json({token: d[1].token, expiry: new Date(d[1]._modified).getTime() + expiresIn}))
@@ -62,6 +64,7 @@ app.post('/v1/token', jsonParser, (req, res) => {
 	
 })
 
+// token validation middleware
 var checkToken = (req, res, next) => {
 	var token = req.headers['authorization']
 

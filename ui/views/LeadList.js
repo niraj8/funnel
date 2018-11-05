@@ -4,6 +4,7 @@ var Lead = require("../models/Lead")
 const {dataColumns} = require("../../config.js")
 const orderedCols = Object.keys(dataColumns)
 
+// todo: Use mithril to sort the table
 function sorts(list) {
     return {
         onclick: function(e) {
@@ -25,15 +26,13 @@ module.exports = {
 		$.ajaxSetup({
 			headers: {'Authorization': `Bearer ${localStorage.getItem("auth-token")}`}
 		})
-		var editToggle = $('#edit-toggle')
-		editToggle.click((e) => $('.editable').editable('toggleDisabled'));
+		$('.editable').editable()
 	},
 	onupdate: () => {
 		$.ajaxSetup({
 			headers: {'Authorization': `Bearer ${localStorage.getItem("auth-token")}`}
 		})
-		var editToggle = $('#edit-toggle')
-		editToggle.click((e) => $('.editable').editable('toggleDisabled'));
+		$('.editable').editable()
 	},
 	view: function() {
 
@@ -44,7 +43,7 @@ module.exports = {
 		})))
 
 		var tbody = m('tbody#table-body', Lead.list.map(lead => {
-			return m('tr', m('th', {id: lead.id, scope: 'row'}, lead.id), orderedCols.map(k => {
+			return m(`tr#lead-${lead.id}`, m('th', {href: lead.id, id: lead.id, scope: 'row'}, lead.id), orderedCols.map(k => {
 				return m('td', m('a', {class: 'editable', id: k, "data-url":`/v1/leads/${lead.id}`, "data-type":"text", "data-pk":lead.id, "data-title":`Enter ${dataColumns[k].value}`}, lead.data[k]))
 			}))
 		}))
@@ -58,9 +57,9 @@ module.exports = {
 		var table = m(".table.table-striped.table-responsive.table-sm.table-bordered", thead, tbody)
 
 		// if (Lead.list.length === 0)
-		// 	return m('div', editBtn, m("h4", "No Leads found."), newRow)
+		// 	return m('div', m("h4", "No Data found."))
 		// else 
-		return m('div', editBtn, searchGroup, table)
+		return m('div', searchGroup, table)
 
 	}
 }

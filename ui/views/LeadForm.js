@@ -28,12 +28,18 @@ module.exports = {
 		formRows.push(m('div.row', inputs.splice(0, 3)))
 		formRows.push(m('div.row', inputs.splice(0, 3)))
 
-		var collapseBtn = m("button.btn.btn-primary", {"data-toggle":"collapse", "data-target": "#new-lead"}, 'New Lead')
+		var collapseBtn = m("button.btn.btn-primary#collapseBtn", {"data-toggle":"collapse", "data-target": "#new-lead"}, 'New Opportunity')
 		
 		var form = m("form#new-lead.collapse.container", {
 			onsubmit: function(e) {
 				e.preventDefault()
-				Lead.new()
+				Lead.new().then(() => {
+					$("#collapseBtn").click() // collapse form
+
+					// clear input fields
+					$("form#new-lead").find("input").val("")
+					$("form#new-lead").find("textarea").val("")
+				})
 			}
 		}, [formRows, m("button.btn.btn-primary[type=submit]", "Save")])
 
