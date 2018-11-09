@@ -38,6 +38,7 @@ var hash = ""
 var token = ""
 
 app.post('/v1/token', jsonParser, (req, res) => {
+	// todo: use bcrypt to generate hash
 	hash = crypto.createHash("md5").update(req.body.password).digest("hex")
 	db.any("SELECT * FROM users WHERE id=$1 and hash=$2", [req.body.username, hash])
 	.then(d => {
@@ -45,15 +46,22 @@ app.post('/v1/token', jsonParser, (req, res) => {
 			res.status(401)
 			res.json({error: "Invalid Credentials"})
 		} else {
-			token = uuid()
-			// todo: the token creation timestamp should be seperate
-			return db.tx(t => {
-				var q1 = t.none(`UPDATE users SET _modified=NOW() WHERE id=$1`, [req.body.username])
-				var q2 = t.one("UPDATE users SET token=$1 WHERE id=$2 RETURNING *", [token, req.body.username])
-				return t.batch([q1, q2])
-			})
-			.then(d => res.json({token: d[1].token, expiry: new Date(d[1]._modified).getTime() + expiresIn}))
-			.catch(err => console.log('Error', error))
+			if (d.token_created && new Date(d.token_created).getTime() + expiresIn > new Date().getTime()) {
+				console.log(d.token_created)
+				res.json({token: d.token, expiry: new Date(d.token_created).getTime() + expiresIn})
+			}
+			else {
+
+				// token expired or token not present
+				token = uuid()
+				// update _modified, token_created and token for username
+				var q = db.one(`UPDATE users SET _modified=NOW(), token_created=NOW(), token=$1 WHERE id=$2 RETURNING *`, [token, req.body.username])
+				return q.then(d2 => {
+					console.log(d2)
+					res.json({token: d2.token, expiry: new Date(d2.token_created).getTime() + expiresIn})
+
+				})
+			}
 		}
 	})
 	.catch(err => {
@@ -61,7 +69,6 @@ app.post('/v1/token', jsonParser, (req, res) => {
 		res.json({error: "Something went wrong"})
 		console.log("Error", err)
 	})
-	
 })
 
 // token validation middleware
@@ -79,8 +86,8 @@ var checkToken = (req, res, next) => {
 				res.json({error: 'Invalid token'})
 			} else next()
 		}).catch(err => {
-			res.status(500)
-			res.json({error: 'Something went wrong'})
+			res.status(403)
+			res.json({error: 'Invalid token'})
 			console.log("Error",err)
 		})
 	}

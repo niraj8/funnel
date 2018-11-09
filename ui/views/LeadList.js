@@ -1,5 +1,4 @@
-// Components is just an object with a 'view' method
-var m = require("mithril")
+const m = require("mithril")
 var Lead = require("../models/Lead")
 const {dataColumns} = require("../../config.js")
 const orderedCols = Object.keys(dataColumns)
@@ -20,6 +19,7 @@ function sorts(list) {
     }
 }
 
+// todo: move the table to LeadTable Component
 module.exports = {
 	oninit: Lead.loadList,
 	oncreate: () => {
@@ -34,7 +34,7 @@ module.exports = {
 		})
 		$('.editable').editable()
 	},
-	view: function() {
+	view: () => {
 
 		var thead = m('thead.thead-light', m('tr', m('th[data-sort-by=id]', {scope: 'col'}, 'id'), orderedCols.map(k => {
 			if (dataColumns.hasOwnProperty(k)) {

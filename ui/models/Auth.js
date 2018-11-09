@@ -12,10 +12,14 @@ var Auth = {
 		}).then(d => {
 			Auth.username = ""
 			Auth.password = ""
-			localStorage.setItem("auth-token", d.token)
-			localStorage.setItem("auth-expiry", d.expiry)
+			localStorage.setItem("auth-token", d.token || "")
+			localStorage.setItem("auth-expiry", d.expiry || "")
 			m.route.set("/list")
 		}).catch(err => {
+			if (err.error === "Invalid token") {
+				m.route.set("/login")
+				localStorage.clear()
+			}
 			Auth.errorMessage = err.error
 		})
 	},
@@ -30,14 +34,18 @@ var Auth = {
 	token: function() {
         var token = localStorage.getItem("auth-token")
         var expiry = localStorage.getItem("auth-expiry")
-        if (!token || expiry <= new Date().getTime()) {
+        if (!token || !expiry || expiry <= new Date().getTime()) {
 			// clear token from localStorage
-            localStorage.clear()
-            Auth.errorMessage("Session expired. Please login again")
-            m.route.set("/login")
+            // localStorage.clear()
+            m.route.set('/login')
+            Auth.errorMessage = "Session expired. Please login again"
         }
         else return token
-    }
+    },
+	redirectToLogin: () => {
+		localStorage.clear()
+		m.route.set('/login')
+	}
 }
 
 module.exports = Auth

@@ -22,7 +22,7 @@ m.route(document.body, "/login", {
 				m.route.set("/login")
 		},
 		render: function() {
-			return m(Layout, m(LeadForm, m(LeadList)))
+			return m(Layout, m(LeadForm), m(LeadList))
 		}
 	}
 })

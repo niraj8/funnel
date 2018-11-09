@@ -43,6 +43,6 @@ module.exports = {
 			}
 		}, [formRows, m("button.btn.btn-primary[type=submit]", "Save")])
 
-		return m('div', collapseBtn, form, vnode.children)
+		return m('div', collapseBtn, form)
 	}
 }
