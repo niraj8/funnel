@@ -2,7 +2,7 @@ var m = require('mithril')
 
 var Layout = require('./views/Layout')
 var Login = require('./views/Login')
-var LeadList = require('./views/LeadList')
+var LeadTable = require('./views/LeadTable')
 var LeadForm = require('./views/LeadForm')
 var Auth = require('./models/Auth')
 
@@ -22,7 +22,7 @@ m.route(document.body, "/login", {
 				m.route.set("/login")
 		},
 		render: function() {
-			return m(Layout, m(LeadForm), m(LeadList))
+			return m(Layout, m(LeadForm), m(LeadTable))
 		}
 	}
 })

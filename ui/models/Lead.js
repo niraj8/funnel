@@ -1,8 +1,10 @@
 var m = require('mithril')
 var Auth = require('./Auth')
+var Globals = require('./Globals')
 
 var Lead = {
 	list: [],
+	currentList: [],
 	current: {},
 	loadList: () => {
 		return m.request({
@@ -14,6 +16,8 @@ var Lead = {
 			// todo: fix sort on id 
 			// result = result.sort((a,b) => a.id > b.id)
 			Lead.list = result
+			Lead.currentList = result
+			if (result.length === 0) Globals.flash = {message:"No Data found", class: 'bg-info text-white'}
 		})
 		.catch(err => {
 			if (err.error === 'Invalid token') Auth.redirectToLogin()
@@ -26,9 +30,7 @@ var Lead = {
 			url: "/v1/leads/" + id,
 			headers: {'Authorization': `Bearer ${Auth.token()}`}
 		})
-		.then((result) => {
-			Lead.current = result
-		})
+		.then((result) => { Lead.current = result })
 		.catch(err => {
 			if (err.error === 'Invalid token') Auth.redirectToLogin()
 			else console.log(err)
@@ -43,6 +45,8 @@ var Lead = {
 		}).then(d => {
 			Lead.list.push(d)
 			Lead.current = d
+			Globals.flash = {class: 'bg-primary text-white', message:`new row #${Lead.current.id} added`}
+			// todo: message should go away after some time
 		})
 		.catch(err => {
 			if (err.error === 'Invalid token') Auth.redirectToLogin()

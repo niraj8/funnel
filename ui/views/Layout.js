@@ -1,10 +1,12 @@
 var m = require('mithril')
+var Globals = require('../models/Globals')
 
 module.exports = {
-	view: function(vnode) {
+	view: (vnode) => {
 		var nav = m('nav.nav-pills.nav-fill',
 			m("a.nav-item[href='/list']#nav-title", {oncreate: m.route.link}, "✅Funnel"))
 		
-		return m(".container-fluid", nav, vnode.children)
+		var flashError = m('p.text-center', {class: Globals.flash.class}, Globals.flash.message)
+		return m(".container-fluid", nav, flashError, vnode.children)
 	}
 }
