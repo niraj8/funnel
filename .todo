@@ -1,3 +1,4 @@
+- [] Use migrations to make changs in db structure
 - [x] Use helmet
 - [x] Check token before serving data in leads API
 - [x] Search table
